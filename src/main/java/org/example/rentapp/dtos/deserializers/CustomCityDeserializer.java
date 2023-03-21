@@ -1,3 +1,4 @@
+/*
 package org.example.rentapp.dtos.deserializers;
 
 import com.fasterxml.jackson.core.JacksonException;
@@ -55,3 +56,4 @@ public class CustomCityDeserializer extends StdDeserializer<CityDto> {
         return cityDto;
     }
 }
+*/

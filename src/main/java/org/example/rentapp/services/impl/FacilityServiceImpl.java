@@ -8,6 +8,8 @@ import org.example.rentapp.exceptions.NoEntityFoundException;
 import org.example.rentapp.services.interfaces.FacilityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -60,5 +62,11 @@ public class FacilityServiceImpl implements FacilityService {
     public FacilityDto loadByIdEager(Long id) {
         Optional<Facility> facility = facilityDao.loadByIdEager(id);
         return mapper.map(facility.orElseThrow(() -> new NoEntityFoundException(id, Facility.class)), FacilityDto.class);
+    }
+
+    @Override
+    public Page<FacilityDto> loadAll(PageRequest pageRequest) {
+        Page<Facility> facilities = facilityDao.loadAll(pageRequest);
+        return facilities.map(n -> mapper.map(n, FacilityDto.class));
     }
 }

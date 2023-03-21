@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.example.rentapp.converters.AddressDtoToEntityConverter;
 import org.example.rentapp.converters.AddressEntityToDtoConverter;
+import org.example.rentapp.converters.CityDtoToEntityConverter;
+import org.example.rentapp.converters.CityEntityToDtoConverter;
 import org.example.rentapp.converters.EntityUserToSecurityConverter;
 import org.example.rentapp.converters.FacilityDtoToEntityConverter;
 import org.example.rentapp.converters.FacilityEntityToDtoConverter;
-import org.example.rentapp.dtos.AddressDto;
-import org.example.rentapp.dtos.deserializers.CustomAddressDeserializer;
-import org.example.rentapp.dtos.deserializers.CustomCityDeserializer;
 import org.example.rentapp.security.SecurityConfig;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,30 +35,24 @@ public class ConfigClass {
     @Bean
     public ObjectMapper objectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(AddressDto.class, new CustomAddressDeserializer(customCityDeserializer()));
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }
 
     @Bean
-    public CustomCityDeserializer customCityDeserializer() {
-        return new CustomCityDeserializer();
-    }
-
-    @Bean
     public FacilityDtoToEntityConverter facilityDtoToEntityConverter() {
-        return new FacilityDtoToEntityConverter(addressDtoToEntityConverter());
+        return new FacilityDtoToEntityConverter();
     }
 
     @Bean
     public FacilityEntityToDtoConverter facilityEntityToDtoConverter() {
-        return new FacilityEntityToDtoConverter();
+        return new FacilityEntityToDtoConverter(addressEntityToDtoConverter());
     }
 
     @Bean
     public AddressDtoToEntityConverter addressDtoToEntityConverter() {
-        return new AddressDtoToEntityConverter();
+        return new AddressDtoToEntityConverter(cityDtoToEntityConverter());
     }
 
     @Bean
@@ -67,18 +60,33 @@ public class ConfigClass {
         return new AddressEntityToDtoConverter();
     }
 
-    private EntityUserToSecurityConverter entityUserToSecurityConverter() {
+    @Bean
+    public CityDtoToEntityConverter cityDtoToEntityConverter() {
+        return new CityDtoToEntityConverter();
+    }
+
+    @Bean
+    public CityEntityToDtoConverter cityEntityToDtoConverter() {
+        return new CityEntityToDtoConverter();
+    }
+
+    @Bean
+    public EntityUserToSecurityConverter entityUserToSecurityConverter() {
         return new EntityUserToSecurityConverter();
     }
 
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addConverter(addressDtoToEntityConverter());
-        modelMapper.addConverter(addressEntityToDtoConverter());
+
         modelMapper.addConverter(facilityDtoToEntityConverter());
         modelMapper.addConverter(facilityEntityToDtoConverter());
         modelMapper.addConverter(entityUserToSecurityConverter());
+        modelMapper.addConverter(addressEntityToDtoConverter());
+        modelMapper.addConverter(cityDtoToEntityConverter());
+        modelMapper.addConverter(addressDtoToEntityConverter());
+        modelMapper.addConverter(cityEntityToDtoConverter());
+
         return modelMapper;
     }
 

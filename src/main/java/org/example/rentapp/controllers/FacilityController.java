@@ -2,6 +2,8 @@ package org.example.rentapp.controllers;
 
 import org.example.rentapp.dtos.FacilityDto;
 import org.example.rentapp.services.interfaces.FacilityService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,5 +58,14 @@ public class FacilityController {
     @GetMapping("/{id}")
     public FacilityDto loadById(@PathVariable(name = "id") Long id) {
         return facilityService.loadById(id);
+    }
+
+    @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
+    @GetMapping
+    public Page<FacilityDto> loadAll(
+            @RequestParam(name = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ){
+        return facilityService.loadAll(PageRequest.of(offset, limit));
     }
 }
