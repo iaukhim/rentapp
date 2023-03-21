@@ -1,4 +1,4 @@
-package org.example.rentapp.converters;
+package org.example.rentapp.converters.user;
 
 import org.example.rentapp.entities.User;
 import org.example.rentapp.security.SecurityUser;

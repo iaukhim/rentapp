@@ -1,4 +1,4 @@
-package org.example.rentapp.converters;
+package org.example.rentapp.converters.facility;
 
 import org.example.rentapp.dtos.FacilityDto;
 import org.example.rentapp.entities.Facility;

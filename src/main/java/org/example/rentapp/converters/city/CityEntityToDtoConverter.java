@@ -1,4 +1,4 @@
-package org.example.rentapp.converters;
+package org.example.rentapp.converters.city;
 
 import org.example.rentapp.dtos.CityDto;
 import org.example.rentapp.entities.City;

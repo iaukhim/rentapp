@@ -2,15 +2,23 @@ package org.example.rentapp.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.example.rentapp.converters.AddressDtoToEntityConverter;
-import org.example.rentapp.converters.AddressEntityToDtoConverter;
-import org.example.rentapp.converters.CityDtoToEntityConverter;
-import org.example.rentapp.converters.CityEntityToDtoConverter;
-import org.example.rentapp.converters.EntityUserToSecurityConverter;
-import org.example.rentapp.converters.FacilityDtoToEntityConverter;
-import org.example.rentapp.converters.FacilityEntityToDtoConverter;
+import org.example.rentapp.converters.address.AddressDtoToEntityConverter;
+import org.example.rentapp.converters.address.AddressEntityToDtoConverter;
+import org.example.rentapp.converters.city.CityDtoToEntityConverter;
+import org.example.rentapp.converters.city.CityEntityToDtoConverter;
+import org.example.rentapp.converters.order.OrderEntityToDtoConverter;
+import org.example.rentapp.converters.review.ReviewEntityToDtoConverter;
+import org.example.rentapp.converters.user.EntityUserToSecurityConverter;
+import org.example.rentapp.converters.facility.FacilityDtoToEntityConverter;
+import org.example.rentapp.converters.facility.FacilityEntityToDtoConverter;
+import org.example.rentapp.converters.user.UserDtoToEntityConverter;
+import org.example.rentapp.converters.user.UserEntityToDtoConverter;
 import org.example.rentapp.security.SecurityConfig;
+import org.hibernate.collection.spi.PersistentCollection;
+import org.hibernate.proxy.HibernateProxy;
+import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -75,17 +83,47 @@ public class ConfigClass {
         return new EntityUserToSecurityConverter();
     }
 
+
+    @Bean
+    public UserEntityToDtoConverter userEntityToDtoConverter() {
+        return new UserEntityToDtoConverter();
+    }
+
+    @Bean
+    public UserDtoToEntityConverter userDtoToEntityConverter() {
+        return new UserDtoToEntityConverter();
+    }
+
+    @Bean
+    public OrderEntityToDtoConverter orderEntityToDtoConverter() {
+        return new OrderEntityToDtoConverter();
+    }
+
+    @Bean
+    public ReviewEntityToDtoConverter reviewEntityToDtoConverter() {
+        return new ReviewEntityToDtoConverter();
+    }
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
+        modelMapper.getConfiguration().setPropertyCondition(new Condition<>() {
+            public boolean applies(MappingContext<Object, Object> context) {
+                return !(context.getSource() instanceof HibernateProxy || context.getSource() instanceof PersistentCollection<?>);
+            }
+        });
+
         modelMapper.addConverter(facilityDtoToEntityConverter());
         modelMapper.addConverter(facilityEntityToDtoConverter());
-        modelMapper.addConverter(entityUserToSecurityConverter());
         modelMapper.addConverter(addressEntityToDtoConverter());
-        modelMapper.addConverter(cityDtoToEntityConverter());
         modelMapper.addConverter(addressDtoToEntityConverter());
+        modelMapper.addConverter(cityDtoToEntityConverter());
         modelMapper.addConverter(cityEntityToDtoConverter());
+        modelMapper.addConverter(entityUserToSecurityConverter());
+        modelMapper.addConverter(userEntityToDtoConverter());
+        modelMapper.addConverter(userDtoToEntityConverter());
+        modelMapper.addConverter(orderEntityToDtoConverter());
+        modelMapper.addConverter(reviewEntityToDtoConverter());
 
         return modelMapper;
     }

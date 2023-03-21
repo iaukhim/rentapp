@@ -20,8 +20,6 @@ public class UserDto {
 
     private String email;
 
-    private String password;
-
     private List<RoleDto> roles;
 
     private Boolean status;
@@ -29,5 +27,7 @@ public class UserDto {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate joindate;
+
+    private AddressDto addressDto;
 
 }

@@ -1,7 +1,9 @@
 package org.example.rentapp.dtos;
 
+import lombok.Data;
 import org.example.rentapp.additional.Rating;
 
+@Data
 public class ReviewDto {
 
     private Long id;
@@ -9,7 +11,6 @@ public class ReviewDto {
     private String textReview;
 
     private Rating rating;
-
 
     private FacilityDto facilityDto;
 

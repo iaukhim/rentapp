@@ -21,7 +21,7 @@ public class OrderDto {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate creationDate;
 
-    private Long renterId;
+    private UserDto renter;
 
-    private Long facilityId;
+    private FacilityDto facility;
 }

@@ -1,4 +1,4 @@
-package org.example.rentapp.converters;
+package org.example.rentapp.converters.facility;
 
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceUtil;

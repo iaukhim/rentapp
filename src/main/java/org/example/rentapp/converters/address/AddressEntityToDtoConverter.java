@@ -1,4 +1,4 @@
-package org.example.rentapp.converters;
+package org.example.rentapp.converters.address;
 
 import org.example.rentapp.dtos.AddressDto;
 import org.example.rentapp.entities.Address;

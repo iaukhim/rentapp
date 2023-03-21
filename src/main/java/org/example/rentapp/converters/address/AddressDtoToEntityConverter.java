@@ -1,6 +1,7 @@
-package org.example.rentapp.converters;
+package org.example.rentapp.converters.address;
 
 import lombok.RequiredArgsConstructor;
+import org.example.rentapp.converters.city.CityDtoToEntityConverter;
 import org.example.rentapp.dtos.AddressDto;
 import org.example.rentapp.entities.Address;
 import org.modelmapper.Converter;
