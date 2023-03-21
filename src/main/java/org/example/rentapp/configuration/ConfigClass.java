@@ -47,7 +47,7 @@ public class ConfigClass {
 
     @Bean
     public FacilityEntityToDtoConverter facilityEntityToDtoConverter() {
-        return new FacilityEntityToDtoConverter();
+        return new FacilityEntityToDtoConverter(addressEntityToDtoConverter());
     }
 
     @Bean
