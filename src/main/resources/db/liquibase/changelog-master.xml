@@ -97,4 +97,15 @@
         <tagDatabase tag="0.8-insert-roles"/>
     </changeSet>
 
+    <changeSet id="create-table-reviews" author="I.Aukhim">
+        <sqlFile encoding="utf8" path="./sql/09.create-reviews-table.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile encoding="utf8" path="./sql/09.rollback.sql" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0.9" author="I.Aukhim">
+        <tagDatabase tag="0.9-reviews-table"/>
+    </changeSet>
+
 </databaseChangeLog>

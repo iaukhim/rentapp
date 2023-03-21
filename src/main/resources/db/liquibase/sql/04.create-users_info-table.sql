@@ -11,4 +11,8 @@ CREATE TABLE users_info(
      FOREIGN KEY (id) REFERENCES users(id) ON UPDATE CASCADE
                                            ON DELETE CASCADE,
      PRIMARY KEY (id)
-     )
+     );
+
+CREATE INDEX `lastname_idx` ON `users_info` (lastname);
+
+CREATE INDEX `status_idx` ON `users_info` (status);

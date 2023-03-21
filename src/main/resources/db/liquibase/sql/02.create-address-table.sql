@@ -36,3 +36,5 @@ CREATE TABLE `addresses`(
      FOREIGN KEY (city_id) REFERENCES cities(id) ON UPDATE CASCADE
                                                  ON DELETE RESTRICT
 );
+
+CREATE INDEX `district_idx` ON `addresses` (district);

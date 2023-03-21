@@ -59,8 +59,13 @@ public class Facility {
     private User owner;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "facility")
     @ToString.Exclude
+    @OneToMany(mappedBy = "facility")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "facility")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Review> reviews;
 
 }

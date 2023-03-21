@@ -9,3 +9,6 @@ CREATE TABLE facilities (
      FOREIGN KEY (address_id)  REFERENCES addresses (id) ON UPDATE CASCADE
                                                        ON DELETE RESTRICT
 );
+
+
+CREATE INDEX `space_idx` ON `facilities` (`space`);

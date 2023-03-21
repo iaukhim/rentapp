@@ -2,17 +2,23 @@ package org.example.rentapp.dao.impl;
 
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import lombok.RequiredArgsConstructor;
 import org.example.rentapp.dao.interfaces.UserDao;
 import org.example.rentapp.entities.User;
 import org.example.rentapp.entities.User_;
+import org.example.rentapp.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class UserDaoImpl extends AbstractDaoImpl<User, Long> implements UserDao {
 
+    private final UserRepository userRepository;
     private final String DELETE_NON_ACTIVE_USERS_QUERY = "DELETE FROM " + User.class.getName() + " WHERE " + User_.STATUS + " = false";
 
     private final String LOAD_BY_ID_FETCH = "SELECT u FROM " + User.class.getName() + " u  LEFT OUTER JOIN FETCH u." + User_.ROLES + " LEFT OUTER JOIN FETCH u." + User_.ADDRESS + "  WHERE u." + User_.ID + "= :id";
@@ -39,5 +45,10 @@ public class UserDaoImpl extends AbstractDaoImpl<User, Long> implements UserDao 
         query.setParameter("email", email);
         List<User> userList = query.getResultList();
         return userList.isEmpty() ? Optional.empty() : Optional.of(userList.get(0));
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }
