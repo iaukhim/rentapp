@@ -6,9 +6,13 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Root;
+import lombok.RequiredArgsConstructor;
 import org.example.rentapp.dao.interfaces.FacilityDao;
 import org.example.rentapp.entities.Facility;
 import org.example.rentapp.entities.Facility_;
+import org.example.rentapp.repositories.FacilityRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -17,8 +21,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class FacilityDaoImpl extends AbstractDaoImpl<Facility, Long> implements FacilityDao {
-
+    private final FacilityRepository facilityRepository;
     @Override
     public Facility findLargestFacility() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -41,4 +46,10 @@ public class FacilityDaoImpl extends AbstractDaoImpl<Facility, Long> implements 
         Facility facility = entityManager.find(Facility.class, id, hints);
         return Optional.ofNullable(facility);
     }
+
+    @Override
+    public Page<Facility> loadAll(PageRequest pageRequest) {
+        return facilityRepository.findAll(pageRequest);
+    }
+
 }

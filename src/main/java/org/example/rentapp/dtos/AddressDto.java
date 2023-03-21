@@ -11,15 +11,7 @@ public class AddressDto {
 
     private Long id;
 
-    private Long cityId;
-
-    private String cityName;
-
-    private Long countryId;
-
-    private String countryCode;
-
-    private String countryName;
+    private CityDto cityDto;
 
     private String district;
 
