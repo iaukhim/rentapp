@@ -37,6 +37,7 @@ public class DataProvider {
         Facility facility = new Facility();
         facility.setName("zal1");
         facility.setSpace(300D);
+        facility.setPrice(50D);
         return facility;
     }
 

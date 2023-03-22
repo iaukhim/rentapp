@@ -1,6 +1,7 @@
 package org.example.rentapp.controllers;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.rentapp.dtos.RoleDto;
 import org.example.rentapp.dtos.UserCreationDto;
@@ -29,14 +30,14 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/login")
-    public String authenticate(@RequestBody UserCreationDto userDto) {
+    public String authenticate(@Valid @RequestBody UserCreationDto userDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
         UserDto loadedUser = userService.loadByEmail(userDto.getEmail());
         return jwtService.createToken(loadedUser.getEmail());
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UserCreationDto userCreationDto) {
+    public String register(@Valid @RequestBody UserCreationDto userCreationDto) {
         List<RoleDto> roles = userCreationDto.getRoles();
         roles.forEach(n -> {
             if (n.getName().equals("ADMIN")) {

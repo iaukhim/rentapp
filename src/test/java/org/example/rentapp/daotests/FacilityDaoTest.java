@@ -93,6 +93,7 @@ public class FacilityDaoTest {
         facility.setAddress(address);
         User user = userDao.loadById(1L).get();
         facility.setOwner(user);
+        facility.setPrice(20D);
         Assertions.assertTrue(facilityDao.loadAll().size() > 0);
         facility = facilityDao.save(facility);
         facility = facilityDao.update(facility);

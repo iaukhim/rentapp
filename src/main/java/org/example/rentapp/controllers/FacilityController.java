@@ -1,5 +1,6 @@
 package org.example.rentapp.controllers;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import net.kaczmarzyk.spring.data.jpa.domain.EqualIgnoreCase;
@@ -59,7 +60,7 @@ public class FacilityController {
 
     @PostMapping
     @Secured({ROLE_LANDLORD, ROLE_ADMIN})
-    public FacilityDto save(@RequestBody FacilityDto facilityDto) {
+    public FacilityDto save(@Valid @RequestBody FacilityDto facilityDto) {
         return facilityService.save(facilityDto);
     }
 
@@ -74,7 +75,7 @@ public class FacilityController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured({ROLE_ADMIN})
-    public void update(@RequestBody FacilityDto facilityDto) {
+    public void update(@Valid @RequestBody FacilityDto facilityDto) {
         facilityService.update(facilityDto);
     }
 
@@ -100,6 +101,8 @@ public class FacilityController {
                     @Spec(path = Facility_.NAME, params = "nameLike", spec = LikeIgnoreCase.class),
                     @Spec(path = Facility_.SPACE, params = {"spaceLessThan"}, spec = LessThan.class),
                     @Spec(path = Facility_.SPACE, params = {"spaceGreaterThan"}, spec = GreaterThan.class),
+                    @Spec(path = Facility_.PRICE, params = {"priceLessThan"}, spec = LessThan.class),
+                    @Spec(path = Facility_.PRICE, params = {"priceGreaterThan"}, spec = GreaterThan.class),
                     @Spec(path = "address." + Address_.DISTRICT, params = "district", spec = EqualIgnoreCase.class),
                     @Spec(path = "city." + City_.NAME, params = "city", spec = EqualIgnoreCase.class),
                     @Spec(path = "country." + Country_.CODE, params = "countryCode", spec = EqualIgnoreCase.class),
@@ -136,7 +139,7 @@ public class FacilityController {
     @PutMapping("/my-facilities/")
     @Secured({ROLE_LANDLORD, ROLE_ADMIN})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCurrentUserFacility(@RequestBody FacilityDto facilityDto) {
+    public void updateCurrentUserFacility(@Valid @RequestBody FacilityDto facilityDto) {
         String ownerEmail = facilityService.loadByIdEager(facilityDto.getId()).getOwner().getEmail();
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!ownerEmail.equals(currentUserEmail)) {

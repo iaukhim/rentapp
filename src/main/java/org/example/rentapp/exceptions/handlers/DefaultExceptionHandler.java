@@ -12,9 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -91,8 +95,24 @@ public class DefaultExceptionHandler {
         exceptionResponse.clear();
         log.warn(e.getMessage());
         exceptionResponse.setException(e);
-        exceptionResponse.setMessage("Check your request param");
+        exceptionResponse.setMessage("Check your request param types");
         exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        exceptionResponse.clear();
+        log.warn(e.getMessage());
+        exceptionResponse.setException(e);
+        List<String> errors = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fieldError ->
+                        fieldError.getField() + " : " + fieldError.getDefaultMessage()
+                ).collect(Collectors.toList());
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+        exceptionResponse.setMessage(errors.toString());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,5 +1,6 @@
 package org.example.rentapp.controllers;
 
+import jakarta.validation.Valid;
 import org.example.rentapp.dtos.CountryDto;
 import org.example.rentapp.services.interfaces.CountryService;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class CountryController {
 
     @PostMapping
     @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
-    public CountryDto save(@RequestBody CountryDto countryDto) {
+    public CountryDto save(@Valid @RequestBody CountryDto countryDto) {
         return countryService.save(countryDto);
     }
 
@@ -47,7 +48,7 @@ public class CountryController {
     @PutMapping("/{id}")
     @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody CountryDto country) {
+    public void update(@Valid @RequestBody CountryDto country) {
         countryService.update(country);
     }
 

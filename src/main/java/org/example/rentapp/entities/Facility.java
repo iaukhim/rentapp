@@ -68,4 +68,6 @@ public class Facility {
     @ToString.Exclude
     private List<Review> reviews;
 
+    private Double price;
+
 }

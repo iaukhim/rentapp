@@ -131,6 +131,7 @@ public class UserControllerTest {
         Assertions.assertTrue(user.getEmail().equals(dataProvider.getUser().getEmail()));
         String newEmail = "new_email@gmail.com";
         user.setEmail(newEmail);
+        user.setRoles(dataProvider.getUser().getRoles());
         UserDto userDto = modelMapper.map(user, UserDto.class);
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/api/users/1")

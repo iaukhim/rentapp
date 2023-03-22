@@ -1,5 +1,6 @@
 package org.example.rentapp.controllers;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.example.rentapp.additional.sorts.OrderSort;
@@ -46,7 +47,7 @@ public class OrderController {
 
     @PostMapping
     @Secured({ROLE_RENTER, ROLE_ADMIN})
-    public OrderDto save(@RequestBody OrderDto orderDto) {
+    public OrderDto save(@Valid @RequestBody OrderDto orderDto) {
         return orderService.save(orderDto);
     }
 
@@ -61,7 +62,7 @@ public class OrderController {
     @PutMapping("/{id}")
     @Secured({ROLE_ADMIN})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody OrderDto orderDto) {
+    public void update(@Valid @RequestBody OrderDto orderDto) {
         orderService.update(orderDto);
     }
 
@@ -74,7 +75,7 @@ public class OrderController {
     @PutMapping("/my-orders/")
     @Secured({ROLE_RENTER, ROLE_ADMIN})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCurrentUserOrder(@RequestBody OrderDto orderDto) {
+    public void updateCurrentUserOrder(@Valid @RequestBody OrderDto orderDto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         String renterEmail = orderService.loadByIdEager(orderDto.getId()).getRenter().getEmail();
         if (!email.equals(renterEmail)) {

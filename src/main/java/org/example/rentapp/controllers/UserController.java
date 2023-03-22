@@ -1,5 +1,6 @@
 package org.example.rentapp.controllers;
 
+import jakarta.validation.Valid;
 import org.example.rentapp.dtos.UserCreationDto;
 import org.example.rentapp.dtos.UserDto;
 import org.example.rentapp.services.interfaces.UserService;
@@ -33,8 +34,8 @@ public class UserController {
     }
 
     @PostMapping
-    @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
-    public UserDto save(@RequestBody UserCreationDto userCreationDto) {
+    @Secured({ROLE_ADMIN})
+    public UserDto save(@Valid @RequestBody UserCreationDto userCreationDto) {
         return userService.save(userCreationDto);
     }
 
@@ -49,7 +50,7 @@ public class UserController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured({ROLE_ADMIN})
-    public void update(@RequestBody UserDto userDto) {
+    public void update(@Valid @RequestBody UserDto userDto) {
         userService.update(userDto);
     }
 

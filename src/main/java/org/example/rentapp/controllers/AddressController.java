@@ -1,6 +1,7 @@
 package org.example.rentapp.controllers;
 
 
+import jakarta.validation.Valid;
 import org.example.rentapp.dtos.AddressDto;
 import org.example.rentapp.services.interfaces.AddressService;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class AddressController {
 
     @PostMapping
     @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
-    public AddressDto save(@RequestBody AddressDto addressDto) {
+    public AddressDto save(@Valid @RequestBody AddressDto addressDto) {
         return addressService.save(addressDto);
     }
 
@@ -48,7 +49,7 @@ public class AddressController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
-    public void update(@RequestBody AddressDto addressDto) {
+    public void update(@Valid @RequestBody AddressDto addressDto) {
         addressService.update(addressDto);
     }
 

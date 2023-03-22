@@ -38,5 +38,7 @@ public class Review {
 
     @OneToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Order order;
 }

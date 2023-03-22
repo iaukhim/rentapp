@@ -1,5 +1,6 @@
 package org.example.rentapp.controllers;
 
+import jakarta.validation.Valid;
 import org.example.rentapp.dtos.CityDto;
 import org.example.rentapp.services.interfaces.CityService;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class CityController {
 
     @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
     @PostMapping
-    public CityDto save(@RequestBody CityDto cityDto) {
+    public CityDto save(@Valid @RequestBody CityDto cityDto) {
         return cityService.save(cityDto);
     }
 
@@ -47,7 +48,7 @@ public class CityController {
     @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody CityDto cityDto) {
+    public void update(@Valid @RequestBody CityDto cityDto) {
         cityService.update(cityDto);
     }
 
