@@ -24,6 +24,7 @@ public class ExceptionResponse {
         this.timestamp = LocalDateTime.now();
         this.error = e.getClass().getSimpleName();
         this.message = e.getMessage();
+        this.timestamp = LocalDateTime.now();
     }
 
     public void clear() {

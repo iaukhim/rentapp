@@ -8,6 +8,8 @@ import org.example.rentapp.exceptions.NoEntityFoundException;
 import org.example.rentapp.services.interfaces.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -58,5 +60,17 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto loadByIdEager(Long id) {
         Optional<Order> order = orderDao.loadByIdEager(id);
         return mapper.map(order.orElseThrow(() -> new NoEntityFoundException(id, Order.class)), OrderDto.class);
+    }
+
+    @Override
+    public Page<OrderDto> loadRenterOrders(PageRequest pageRequest, String email) {
+        Page<Order> orders = orderDao.loadRenterOrders(pageRequest, email);
+        return orders.map(order -> mapper.map(order, OrderDto.class));
+    }
+
+    @Override
+    public Page<OrderDto> loadLandlordOrders(PageRequest pageRequest, String email) {
+        Page<Order> orderList = orderDao.loadLandlordOrders(pageRequest, email);
+        return orderList.map(n -> mapper.map(n, OrderDto.class));
     }
 }

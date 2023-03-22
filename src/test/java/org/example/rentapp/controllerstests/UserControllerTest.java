@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.example.rentapp.controllers.UserController;
 import org.example.rentapp.dao.interfaces.UserDao;
+import org.example.rentapp.dtos.UserCreationDto;
 import org.example.rentapp.dtos.UserDto;
 import org.example.rentapp.entities.Role;
 import org.example.rentapp.entities.User;
@@ -95,8 +96,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(dataProvider.getUser().getEmail()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.password").value(dataProvider.getUser().getPassword()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(dataProvider.getUser().getEmail()));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class UserControllerTest {
         String newEmail = "new_email@gmail.com";
         user.setEmail(newEmail);
         user.setId(null);
-        UserDto userDto = modelMapper.map(user, UserDto.class);
+        UserCreationDto userDto = modelMapper.map(user, UserCreationDto.class);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/users")
                         .header("Authorization", adminJwtToken)

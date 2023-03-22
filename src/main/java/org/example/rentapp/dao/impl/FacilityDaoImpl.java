@@ -13,6 +13,7 @@ import org.example.rentapp.entities.Facility_;
 import org.example.rentapp.repositories.FacilityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FacilityDaoImpl extends AbstractDaoImpl<Facility, Long> implements FacilityDao {
     private final FacilityRepository facilityRepository;
+
     @Override
     public Facility findLargestFacility() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -52,4 +54,13 @@ public class FacilityDaoImpl extends AbstractDaoImpl<Facility, Long> implements 
         return facilityRepository.findAll(pageRequest);
     }
 
+    @Override
+    public Page<Facility> findAllByOwnerEmail(PageRequest pageRequest, String email) {
+        return facilityRepository.findAllByOwnerEmail(pageRequest, email);
+    }
+
+    @Override
+    public Page<Facility> loadAll(PageRequest pageRequest, Specification<Facility> spec) {
+        return facilityRepository.findAll(spec, pageRequest);
+    }
 }

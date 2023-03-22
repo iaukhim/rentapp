@@ -21,6 +21,10 @@
         <model-mapper.version>3.0.0</model-mapper.version>
         <io-jsonwebtoken.version>0.11.5</io-jsonwebtoken.version>
         <jakarta-annotation-api.version>2.1.1</jakarta-annotation-api.version>
+        <jakarta.xml.bind-api.version>4.0.0</jakarta.xml.bind-api.version>
+        <hibernate-jpamodelgen.version>6.1.6.Final</hibernate-jpamodelgen.version>
+        <h2database.version>2.1.214</h2database.version>
+        <specification-arg-resolver.vesion>3.0.0</specification-arg-resolver.vesion>
     </properties>
 
 
@@ -36,6 +40,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -97,18 +105,23 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.0</version>
+            <version>${jakarta.xml.bind-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>6.1.6.Final</version>
+            <version>${hibernate-jpamodelgen.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.1.214</version>
+            <version>${h2database.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kaczmarzyk</groupId>
+            <artifactId>specification-arg-resolver</artifactId>
+            <version>${specification-arg-resolver.vesion}</version>
         </dependency>
     </dependencies>
 

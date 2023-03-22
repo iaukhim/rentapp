@@ -62,6 +62,7 @@ public class DataProvider {
         Order order = new Order();
         order.setCreationDate(LocalDate.now());
         order.setPlannedDate(LocalDate.now().plusMonths(2));
+        order.setDurationInDays(1L);
         return order;
     }
 

@@ -1,6 +1,6 @@
 package org.example.rentapp.exceptions.handlers;
 
-import lombok.extern.java.Log;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.rentapp.exceptions.JwtAuthenticationException;
 import org.example.rentapp.exceptions.NoEntityFoundException;
@@ -14,8 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.logging.Level;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 @Slf4j
@@ -54,10 +53,19 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception e) {
         exceptionResponse.clear();
-        log.error(e.getMessage());
-        exceptionResponse.setException(e);
+        log.error(e.getClass().toString() + " " + e.getMessage());
+        exceptionResponse.setMessage("Oops, something went wrong on server");
         exceptionResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ExceptionResponse> handleValidationException(ValidationException e) {
+        exceptionResponse.clear();
+        log.warn(e.getMessage());
+        exceptionResponse.setException(e);
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(JwtAuthenticationException.class)
@@ -76,5 +84,15 @@ public class DefaultExceptionHandler {
         exceptionResponse.setException(e);
         exceptionResponse.setStatus(HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        exceptionResponse.clear();
+        log.warn(e.getMessage());
+        exceptionResponse.setException(e);
+        exceptionResponse.setMessage("Check your request param");
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

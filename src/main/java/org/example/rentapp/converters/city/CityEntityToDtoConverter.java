@@ -17,7 +17,7 @@ public class CityEntityToDtoConverter implements Converter<City, CityDto> {
         typeMap.addMappings(mapper -> {
             mapper.map(source -> source.getCountry().getId(), (destination, value) -> destination.getCountryDto().setId((Long) value));
             mapper.map(source -> source.getCountry().getName(), (destination, value) -> destination.getCountryDto().setName((String) value));
-            mapper.map(source -> source.getCountry().getCode(), ((destination, value) -> destination.getCountryDto().setCode((String)value)));
+            mapper.map(source -> source.getCountry().getCode(), ((destination, value) -> destination.getCountryDto().setCode((String) value)));
         });
         return modelMapper.map(context.getSource(), context.getDestinationType());
     }

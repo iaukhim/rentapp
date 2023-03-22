@@ -18,4 +18,6 @@ public interface UserService {
     UserDto loadByIdEager(Long id);
 
     UserDto loadByEmail(String email);
+
+    void diActivateAccount(String email);
 }

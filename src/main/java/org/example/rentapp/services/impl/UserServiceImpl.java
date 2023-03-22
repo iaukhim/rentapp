@@ -11,14 +11,10 @@ import org.example.rentapp.services.interfaces.UserService;
 import org.example.rentapp.services.interfaces.UtilService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -85,5 +81,10 @@ public class UserServiceImpl implements UserService {
     public UserDto loadByIdEager(Long id) {
         Optional<User> user = userDao.loadByIdEager(id);
         return mapper.map(user.orElseThrow(() -> new NoEntityFoundException(id, User.class)), UserDto.class);
+    }
+
+    @Override
+    public void diActivateAccount(String email) {
+        userDao.diActivateAccount(email);
     }
 }

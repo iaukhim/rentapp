@@ -5,6 +5,7 @@ import org.example.rentapp.dtos.UserDto;
 import org.example.rentapp.services.interfaces.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,14 +48,36 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
+    @Secured({ROLE_ADMIN})
     public void update(@RequestBody UserDto userDto) {
         userService.update(userDto);
     }
 
     @GetMapping("/{id}")
-    @Secured({ROLE_LANDLORD, ROLE_RENTER, ROLE_ADMIN})
+    @Secured({ROLE_ADMIN})
     public UserDto loadById(@PathVariable(name = "id") Long id) {
         return userService.loadById(id);
+    }
+
+    @PutMapping("/my-account")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured({ROLE_ADMIN, ROLE_RENTER, ROLE_LANDLORD})
+    public void updateCurrentUserAccount(@RequestBody UserDto userDto) {
+        userService.update(userDto);
+    }
+
+    @GetMapping("/my-account")
+    @Secured({ROLE_ADMIN, ROLE_RENTER, ROLE_LANDLORD})
+    public UserDto loadCurrentUserAccount() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.loadByEmail(email);
+    }
+
+    @DeleteMapping("/my-account")
+    @Secured({ROLE_ADMIN, ROLE_RENTER, ROLE_LANDLORD})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMyAccount() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        userService.diActivateAccount(email);
     }
 }

@@ -1,6 +1,6 @@
 package org.example.rentapp.repositories;
 
-import org.example.rentapp.entities.Facility;
+import org.example.rentapp.entities.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -8,8 +8,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FacilityRepository extends PagingAndSortingRepository<Facility, Long>, JpaSpecificationExecutor<Facility> {
+public interface OrderRepository extends PagingAndSortingRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
-    Page<Facility> findAllByOwnerEmail(PageRequest pageRequest, String renterEmail);
+    Page<Order> findAllByFacilityOwnerEmail(PageRequest pageRequest, String email);
 
+    Page<Order> findAllByRenterEmail(String email, PageRequest pageRequest);
 }

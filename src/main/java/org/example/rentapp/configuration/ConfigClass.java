@@ -2,15 +2,16 @@ package org.example.rentapp.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
 import org.example.rentapp.converters.address.AddressDtoToEntityConverter;
 import org.example.rentapp.converters.address.AddressEntityToDtoConverter;
 import org.example.rentapp.converters.city.CityDtoToEntityConverter;
 import org.example.rentapp.converters.city.CityEntityToDtoConverter;
+import org.example.rentapp.converters.facility.FacilityDtoToEntityConverter;
+import org.example.rentapp.converters.facility.FacilityEntityToDtoConverter;
 import org.example.rentapp.converters.order.OrderEntityToDtoConverter;
 import org.example.rentapp.converters.review.ReviewEntityToDtoConverter;
 import org.example.rentapp.converters.user.EntityUserToSecurityConverter;
-import org.example.rentapp.converters.facility.FacilityDtoToEntityConverter;
-import org.example.rentapp.converters.facility.FacilityEntityToDtoConverter;
 import org.example.rentapp.converters.user.UserDtoToEntityConverter;
 import org.example.rentapp.converters.user.UserEntityToDtoConverter;
 import org.example.rentapp.security.SecurityConfig;
@@ -27,7 +28,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.List;
+import java.util.Locale;
 
 @Configuration
 @ComponentScan(value = "org.example")
@@ -35,7 +43,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableTransactionManagement
 @EnableWebMvc
 @Import(SecurityConfig.class)
-public class ConfigClass {
+public class ConfigClass implements WebMvcConfigurer {
 
     @Value("${entities.package}")
     private String entitiesPackage;
@@ -103,6 +111,7 @@ public class ConfigClass {
     public ReviewEntityToDtoConverter reviewEntityToDtoConverter() {
         return new ReviewEntityToDtoConverter();
     }
+
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -126,6 +135,18 @@ public class ConfigClass {
         modelMapper.addConverter(reviewEntityToDtoConverter());
 
         return modelMapper;
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(Locale.ENGLISH);
+        return slr;
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new SpecificationArgumentResolver());
     }
 
 /*

@@ -43,4 +43,7 @@ public class Order {
 
     @Column(name = "creation_date")
     private LocalDate creationDate;
+
+    @Column(name = "duration_in_days")
+    private Long durationInDays;
 }

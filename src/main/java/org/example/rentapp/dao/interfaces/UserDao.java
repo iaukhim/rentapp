@@ -16,4 +16,6 @@ public interface UserDao extends AbstractDao<User, Long> {
 
     Page<User> findAll(Pageable pageable);
 
+    void diActivateAccount(String email);
+
 }

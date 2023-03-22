@@ -51,4 +51,11 @@ public class UserDaoImpl extends AbstractDaoImpl<User, Long> implements UserDao 
     public Page<User> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
+
+    @Override
+    public void diActivateAccount(String email) {
+        Query query = entityManager.createQuery("UPDATE User u SET u.status = false WHERE u.email = :email");
+        query.setParameter("email", email);
+        query.executeUpdate();
+    }
 }

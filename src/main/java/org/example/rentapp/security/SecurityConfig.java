@@ -69,7 +69,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/api/auth/**")
-                                      .requestMatchers("/error");
+                .requestMatchers("/error");
     }
 
     @Bean

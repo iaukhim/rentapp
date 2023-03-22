@@ -24,4 +24,6 @@ public class OrderDto {
     private UserDto renter;
 
     private FacilityDto facility;
+
+    private Long durationInDays;
 }

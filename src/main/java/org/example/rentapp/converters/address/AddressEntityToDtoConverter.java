@@ -21,7 +21,7 @@ public class AddressEntityToDtoConverter implements Converter<Address, AddressDt
                     mapper.map(source -> source.getCity().getName(), (destination, value) -> destination.getCityDto().setName((String) value));
                     mapper.map(source -> source.getCity().getCountry().getId(), (destination, value) -> destination.getCityDto().getCountryDto().setId((Long) value));
                     mapper.map(source -> source.getCity().getCountry().getName(), (destination, value) -> destination.getCityDto().getCountryDto().setName((String) value));
-                    mapper.map(source -> source.getCity().getCountry().getCode(), (destination, value) -> destination.getCityDto().getCountryDto().setCode((String)value));
+                    mapper.map(source -> source.getCity().getCountry().getCode(), (destination, value) -> destination.getCityDto().getCountryDto().setCode((String) value));
                 });
 
         AddressDto addressDto = modelMapper.map(address, AddressDto.class);
