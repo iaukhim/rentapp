@@ -16,6 +16,8 @@ services:
     networks:
       - rent-app-network
   rent-app:
+    depends_on:
+      - db
     container_name: rent-app
     build:
       context: ../.

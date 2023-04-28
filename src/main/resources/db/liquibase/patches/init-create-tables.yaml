@@ -10,7 +10,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -31,13 +31,13 @@ databaseChangeLog:
       author: I.Aukhim
       changes:
         - tagDatabase:
-            tag: 0.2-addresses
+            tag: 0.2-countries
         - createTable:
             tableName: countries
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -54,19 +54,29 @@ databaseChangeLog:
                   constraints:
                     unique: true
                     nullable: false
+      rollback:
+        - dropTable:
+          tableName: countries
+
+  - changeSet:
+      id: 0.3
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.3-cities
         - createTable:
             tableName: cities
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: country_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_cities_country_id
@@ -82,20 +92,29 @@ databaseChangeLog:
             columnNames: country_id, name
             constraintName: UNIQUE_CITY_IN_COUNTRY
             tableName: cities
+      rollback:
+        - dropTable:
+          tableName: cities
 
+  - changeSet:
+      id: 0.4
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+              tag: 0.4-addresses
         - createTable:
             tableName: addresses
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: city_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_addresses_city_id
@@ -120,23 +139,19 @@ databaseChangeLog:
       rollback:
         - dropTable:
           tableName: addresses
-        - dropTable:
-          tableName: cities
-        - dropTable:
-          tableName: countries
 
   - changeSet:
-      id: 0.3
+      id: 0.5
       author: I.Aukhim
       changes:
         - tagDatabase:
-            tag: 0.3-users
+            tag: 0.5-users
         - createTable:
             tableName: users
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -157,17 +172,17 @@ databaseChangeLog:
           tableName: users
 
   - changeSet:
-      id: 0.4
+      id: 0.6
       author: I.Aukhim
       changes:
         - tagDatabase:
-            tag: 0.4-users_info
+            tag: 0.6-users_info
         - createTable:
             tableName: users_info
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -177,7 +192,7 @@ databaseChangeLog:
                     onDelete: CASCADE
               - column:
                   name: address_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_users_info_address_id
@@ -217,17 +232,17 @@ databaseChangeLog:
           tableName: users_info
 
   - changeSet:
-      id: 0.5
+      id: 0.7
       author: I.Aukhim
       changes:
         - tagDatabase:
-            tag: 0.5-users_roles
+            tag: 0.7-users_roles
         - createTable:
             tableName: users_roles
             columns:
               - column:
                   name: user_id
-                  type: int
+                  type: bigint
                   constraints:
                     foreignKeyName: fk_roles_user_id
                     references: users(id)
@@ -235,7 +250,7 @@ databaseChangeLog:
                     onDelete: CASCADE
               - column:
                   name: role_id
-                  type: int
+                  type: bigint
                   constraints:
                     foreignKeyName: fk_roles_role_id
                     references: roles(id)
@@ -249,17 +264,17 @@ databaseChangeLog:
           tableName: users_roles
 
   - changeSet:
-      id: 0.6
+      id: 0.8
       author: I.Aukhim
       changes:
         - tagDatabase:
-            tag: 0.6-facilities
+            tag: 0.8-facilities
         - createTable:
             tableName: facilities
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -271,7 +286,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: address_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_facilities_address_id
@@ -280,7 +295,7 @@ databaseChangeLog:
                     onDelete: RESTRICT
               - column:
                   name: owner_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_facilities_owner_id
@@ -315,24 +330,24 @@ databaseChangeLog:
           tableName: facilities
 
   - changeSet:
-      id: 0.7
+      id: 0.9
       author: I.Aukhim
       changes:
         - tagDatabase:
-            tag: 0.7-orders
+            tag: 0.9-orders
         - createTable:
             tableName: orders
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: facility_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_orders_facility_id
@@ -341,7 +356,7 @@ databaseChangeLog:
                     onDelete: CASCADE
               - column:
                   name: renter_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_orders_renter_id
@@ -360,7 +375,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: duration_in_days
-                  type: int
+                  type: bigint
                   defaultValue: 1
                   constraints:
                     nullable: false
@@ -375,24 +390,24 @@ databaseChangeLog:
           tableName: orders
 
   - changeSet:
-      id: 0.8
+      id: 0.10
       author: I.Aukhim
       changes:
         - tagDatabase:
-            tag: 0.8-reviews
+            tag: 0.10-reviews
         - createTable:
             tableName: reviews
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: facility_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_reviews_facility_id
@@ -401,7 +416,7 @@ databaseChangeLog:
                     onDelete: CASCADE
               - column:
                   name: renter_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_reviews_renter_id
@@ -410,7 +425,7 @@ databaseChangeLog:
                     onDelete: CASCADE
               - column:
                   name: order_id
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_reviews_order_id
@@ -424,7 +439,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: rating
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
         - createIndex:
