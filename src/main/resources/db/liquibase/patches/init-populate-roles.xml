@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet author="I.Aukhim" id="0.9">
+        <insert
+                tableName="roles">
+            <column name="role" value="ADMIN"/>
+        </insert>
+        <insert
+                dbms="h2, mysql"
+                schemaName="senla-workhome-2"
+                tableName="roles">
+            <column name="role" value="LANDLORD"/>
+        </insert>
+        <insert
+                dbms="h2, mysql"
+                schemaName="senla-workhome-2"
+                tableName="roles">
+            <column name="role" value="RENTER"/>
+        </insert>
+        <rollback>
+            <delete tableName="roles">
+                <where>role IN ('ADMIN, 'RENTER', 'LANDLORD')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

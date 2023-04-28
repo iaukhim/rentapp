@@ -1,0 +1,438 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0.1
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.1-roles
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: roles
+
+
+  - changeSet:
+      id: 0.2
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.2-addresses
+        - createTable:
+            tableName: countries
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(10)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+        - createTable:
+            tableName: cities
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_cities_country_id
+                    references: cities(id)
+                    onUpdate: CASCADE
+                    onDelete: RESTRICT
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            columnNames: country_id, name
+            constraintName: UNIQUE_CITY_IN_COUNTRY
+            tableName: cities
+
+        - createTable:
+            tableName: addresses
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: city_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_addresses_city_id
+                    references: cities(id)
+                    onUpdate: CASCADE
+                    onDelete: RESTRICT
+              - column:
+                  name: district
+                  type: varchar(255)
+              - column:
+                  name: street_name
+                  type: varchar(255)
+              - column:
+                  name: street_number
+                  type: varchar(255)
+        - createIndex:
+            columns:
+              - column:
+                  name: district
+            indexName: idx_address
+            tableName: addresses
+      rollback:
+        - dropTable:
+          tableName: addresses
+        - dropTable:
+          tableName: cities
+        - dropTable:
+          tableName: countries
+
+  - changeSet:
+      id: 0.3
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.3-users
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+      rollback:
+       - dropTable:
+          tableName: users
+
+  - changeSet:
+      id: 0.4
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.4-users_info
+        - createTable:
+            tableName: users_info
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_users_info_id
+                    references: users(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+              - column:
+                  name: address_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_users_info_address_id
+                    references: addresses(id)
+                    onUpdate: CASCADE
+                    onDelete: NO ACTION
+              - column:
+                  name: firstname
+                  type: varchar(255)
+              - column:
+                  name: lastname
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: joindate
+                  type: date
+                  constraints:
+                    nullable: false
+        - createIndex:
+            columns:
+              - column:
+                  name: lastname
+            indexName: idx_lastname
+            tableName: users_info
+        - createIndex:
+            columns:
+              - column:
+                  name: status
+            indexName: idx_status
+            tableName: users_info
+      rollback:
+        - dropTable:
+          tableName: users_info
+
+  - changeSet:
+      id: 0.5
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.5-users_roles
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_roles_user_id
+                    references: users(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+              - column:
+                  name: role_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_roles_role_id
+                    references: roles(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+        - addPrimaryKey:
+            columnNames: user_id, role_id
+            tableName: users_roles
+      rollback:
+        - dropTable:
+          tableName: users_roles
+
+  - changeSet:
+      id: 0.6
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.6-facilities
+        - createTable:
+            tableName: facilities
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_facilities_address_id
+                    references: addresses(id)
+                    onUpdate: CASCADE
+                    onDelete: RESTRICT
+              - column:
+                  name: owner_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_facilities_owner_id
+                    references: users(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+              - column:
+                  name: space
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: double
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            columns:
+              - column:
+                  name: space
+            indexName: idx_space
+            tableName: facilities
+        - createIndex:
+            columns:
+              - column:
+                  name: price
+            indexName: idx_price
+            tableName: facilities
+      rollback:
+        - dropTable:
+          tableName: facilities
+
+  - changeSet:
+      id: 0.7
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.7-orders
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: facility_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_orders_facility_id
+                    references: facilities(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+              - column:
+                  name: renter_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_orders_renter_id
+                    references: users(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+              - column:
+                  name: planned_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration_in_days
+                  type: int
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+        - createIndex:
+            columns:
+              - column:
+                  name: planned_date
+            indexName: idx_planned_date
+            tableName: orders
+      rollback:
+        - dropTable:
+          tableName: orders
+
+  - changeSet:
+      id: 0.8
+      author: I.Aukhim
+      changes:
+        - tagDatabase:
+            tag: 0.8-reviews
+        - createTable:
+            tableName: reviews
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: facility_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_reviews_facility_id
+                    references: facilities(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+              - column:
+                  name: renter_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_reviews_renter_id
+                    references: users(id)
+                    onUpdate: CASCADE
+                    onDelete: CASCADE
+              - column:
+                  name: order_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_reviews_order_id
+                    references: orders(id)
+                    onUpdate: CASCADE
+                    onDelete: RESTRICT
+              - column:
+                  name: text_review
+                  type: varchar(3000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rating
+                  type: int
+                  constraints:
+                    nullable: false
+        - createIndex:
+            columns:
+              - column:
+                  name: rating
+            indexName: idx_rating
+            tableName: reviews
+      rollback:
+        - dropTable:
+          tableName: reviews
