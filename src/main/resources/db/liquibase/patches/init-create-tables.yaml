@@ -79,10 +79,6 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_cities_country_id
-                    references: cities(id)
-                    onUpdate: CASCADE
-                    onDelete: RESTRICT
               - column:
                   name: name
                   type: varchar(255)
@@ -92,6 +88,14 @@ databaseChangeLog:
             columnNames: country_id, name
             constraintName: UNIQUE_CITY_IN_COUNTRY
             tableName: cities
+        - addForeignKeyConstraint:
+            baseColumnNames: country_id
+            baseTableName: cities
+            constraintName: fk_cities_country_id
+            onDelete: RESTRICT
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: countries
       rollback:
         - dropTable:
           tableName: cities
@@ -117,10 +121,6 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_addresses_city_id
-                    references: cities(id)
-                    onUpdate: CASCADE
-                    onDelete: RESTRICT
               - column:
                   name: district
                   type: varchar(255)
@@ -136,6 +136,14 @@ databaseChangeLog:
                   name: district
             indexName: idx_address
             tableName: addresses
+        - addForeignKeyConstraint:
+            baseColumnNames: city_id
+            baseTableName: addresses
+            constraintName: fk_addresses_city_id
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: cities
       rollback:
         - dropTable:
           tableName: addresses
@@ -186,19 +194,11 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                    foreignKeyName: fk_users_info_id
-                    references: users(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
               - column:
                   name: address_id
                   type: bigint
                   constraints:
-                    nullable: false
-                    foreignKeyName: fk_users_info_address_id
-                    references: addresses(id)
-                    onUpdate: CASCADE
-                    onDelete: NO ACTION
+                    nullable: true
               - column:
                   name: firstname
                   type: varchar(255)
@@ -215,6 +215,27 @@ databaseChangeLog:
                   type: date
                   constraints:
                     nullable: false
+              - column:
+                  name: phone_number
+                  type: varchar(30)
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: users_info
+            constraintName: fk_users_info_id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: users_info
+            constraintName: fk_users_info_address_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: addresses
         - createIndex:
             columns:
               - column:
@@ -244,21 +265,31 @@ databaseChangeLog:
                   name: user_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_roles_user_id
-                    references: users(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
+                    nullable: false
               - column:
                   name: role_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_roles_role_id
-                    references: roles(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
+                    nullable: false
         - addPrimaryKey:
             columnNames: user_id, role_id
             tableName: users_roles
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: users_roles
+            constraintName: fk_roles_user_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: users_roles
+            constraintName: fk_roles_role_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: roles
       rollback:
         - dropTable:
           tableName: users_roles
@@ -289,19 +320,11 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_facilities_address_id
-                    references: addresses(id)
-                    onUpdate: CASCADE
-                    onDelete: RESTRICT
               - column:
                   name: owner_id
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_facilities_owner_id
-                    references: users(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
               - column:
                   name: space
                   type: double
@@ -312,6 +335,22 @@ databaseChangeLog:
                   type: double
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: facilities
+            constraintName: fk_facilities_address_id
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: addresses
+        - addForeignKeyConstraint:
+            baseColumnNames: owner_id
+            baseTableName: facilities
+            constraintName: fk_facilities_owner_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
 
         - createIndex:
             columns:
@@ -350,19 +389,11 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_orders_facility_id
-                    references: facilities(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
               - column:
                   name: renter_id
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_orders_renter_id
-                    references: users(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
               - column:
                   name: planned_date
                   type: datetime
@@ -379,6 +410,22 @@ databaseChangeLog:
                   defaultValue: 1
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: facility_id
+            baseTableName: orders
+            constraintName: fk_orders_facility_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: facilities
+        - addForeignKeyConstraint:
+            baseColumnNames: renter_id
+            baseTableName: orders
+            constraintName: fk_orders_renter_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
         - createIndex:
             columns:
               - column:
@@ -390,7 +437,7 @@ databaseChangeLog:
           tableName: orders
 
   - changeSet:
-      id: 0.10
+      id: "0.10"
       author: I.Aukhim
       changes:
         - tagDatabase:
@@ -410,28 +457,14 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_reviews_facility_id
-                    references: facilities(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
               - column:
                   name: renter_id
                   type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_reviews_renter_id
-                    references: users(id)
-                    onUpdate: CASCADE
-                    onDelete: CASCADE
               - column:
                   name: order_id
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_reviews_order_id
-                    references: orders(id)
-                    onUpdate: CASCADE
-                    onDelete: RESTRICT
               - column:
                   name: text_review
                   type: varchar(3000)
@@ -442,6 +475,30 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: renter_id
+            baseTableName: reviews
+            constraintName: fk_reviews_renter_id
+            onUpdate: CASCADE
+            onDelete: SET NULL
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: reviews
+            constraintName: fk_reviews_order_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: orders
+        - addForeignKeyConstraint:
+            baseColumnNames: facility_id
+            baseTableName: reviews
+            constraintName: fk_reviews_facility_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: facilities
         - createIndex:
             columns:
               - column:
