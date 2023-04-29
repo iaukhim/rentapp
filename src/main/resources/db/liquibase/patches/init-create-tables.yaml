@@ -2,6 +2,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.1
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: roles
       changes:
         - tagDatabase:
             tag: 0.1-roles
@@ -25,10 +31,15 @@ databaseChangeLog:
         - dropTable:
             tableName: roles
 
-
   - changeSet:
       id: 0.2
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: countries
       changes:
         - tagDatabase:
             tag: 0.2-countries
@@ -61,6 +72,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.3
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: cities
       changes:
         - tagDatabase:
             tag: 0.3-cities
@@ -103,6 +120,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.4
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: addresses
       changes:
         - tagDatabase:
               tag: 0.4-addresses
@@ -151,6 +174,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.5
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: users
       changes:
         - tagDatabase:
             tag: 0.5-users
@@ -182,6 +211,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.6
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: users_info
       changes:
         - tagDatabase:
             tag: 0.6-users_info
@@ -255,6 +290,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.7
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: users_roles
       changes:
         - tagDatabase:
             tag: 0.7-users_roles
@@ -297,6 +338,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.8
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: facilities
       changes:
         - tagDatabase:
             tag: 0.8-facilities
@@ -371,6 +418,12 @@ databaseChangeLog:
   - changeSet:
       id: 0.9
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: orders
       changes:
         - tagDatabase:
             tag: 0.9-orders
@@ -439,6 +492,12 @@ databaseChangeLog:
   - changeSet:
       id: "0.10"
       author: I.Aukhim
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: reviews
       changes:
         - tagDatabase:
             tag: 0.10-reviews

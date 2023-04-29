@@ -8,6 +8,23 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <preConditions onFail="HALT">
+        <or>
+            <and>
+                <tableExists tableName="roles" schemaName="senla-workhome-2"></tableExists>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*)
+                    FROM "senla-workhome-2.roles"
+                    WHERE role in ('ADMIN', 'LANDLORD', 'RENTER')
+                </sqlCheck>
+                <changeSetExecuted id="0.1" author="i.Aukhim" changeLogFile="db/liquibase/patches/init-create-tables.yaml"></changeSetExecuted>
+            </and>
+            <not>
+                <tableExists tableName="roles" schemaName="senla-workhome-2"></tableExists>
+            </not>
+        </or>
+
+    </preConditions>
     <changeSet author="I.Aukhim" id="0.11">
         <insert
                 tableName="roles">
