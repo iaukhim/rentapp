@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - preConditions:
+      - onFail: HALT
+      - or:
+          - dbms:
+              type: mysql
+          - dbms:
+              type: h2
+          - dbms:
+              type: postgresql
+  - includeAll:
+      path: db/liquibase/patches

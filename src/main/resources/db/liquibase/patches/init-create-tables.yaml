@@ -1,0 +1,569 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0.1
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: roles
+      changes:
+        - tagDatabase:
+            tag: 0.1-roles
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: roles
+
+  - changeSet:
+      id: 0.2
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: countries
+      changes:
+        - tagDatabase:
+            tag: 0.2-countries
+        - createTable:
+            tableName: countries
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(10)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+      rollback:
+        - dropTable:
+          tableName: countries
+
+  - changeSet:
+      id: 0.3
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: cities
+      changes:
+        - tagDatabase:
+            tag: 0.3-cities
+        - createTable:
+            tableName: cities
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            columnNames: country_id, name
+            constraintName: UNIQUE_CITY_IN_COUNTRY
+            tableName: cities
+        - addForeignKeyConstraint:
+            baseColumnNames: country_id
+            baseTableName: cities
+            constraintName: fk_cities_country_id
+            onDelete: RESTRICT
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: countries
+      rollback:
+        - dropTable:
+          tableName: cities
+
+  - changeSet:
+      id: 0.4
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: addresses
+      changes:
+        - tagDatabase:
+              tag: 0.4-addresses
+        - createTable:
+            tableName: addresses
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: city_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: district
+                  type: varchar(255)
+              - column:
+                  name: street_name
+                  type: varchar(255)
+              - column:
+                  name: street_number
+                  type: varchar(255)
+        - createIndex:
+            columns:
+              - column:
+                  name: district
+            indexName: idx_address
+            tableName: addresses
+        - addForeignKeyConstraint:
+            baseColumnNames: city_id
+            baseTableName: addresses
+            constraintName: fk_addresses_city_id
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: cities
+      rollback:
+        - dropTable:
+          tableName: addresses
+
+  - changeSet:
+      id: 0.5
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: users
+      changes:
+        - tagDatabase:
+            tag: 0.5-users
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+      rollback:
+       - dropTable:
+          tableName: users
+
+  - changeSet:
+      id: 0.6
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: users_info
+      changes:
+        - tagDatabase:
+            tag: 0.6-users_info
+        - createTable:
+            tableName: users_info
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: address_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: firstname
+                  type: varchar(255)
+              - column:
+                  name: lastname
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: joindate
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: varchar(30)
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: users_info
+            constraintName: fk_users_info_id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: users_info
+            constraintName: fk_users_info_address_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: addresses
+        - createIndex:
+            columns:
+              - column:
+                  name: lastname
+            indexName: idx_lastname
+            tableName: users_info
+        - createIndex:
+            columns:
+              - column:
+                  name: status
+            indexName: idx_status
+            tableName: users_info
+      rollback:
+        - dropTable:
+          tableName: users_info
+
+  - changeSet:
+      id: 0.7
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: users_roles
+      changes:
+        - tagDatabase:
+            tag: 0.7-users_roles
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: user_id, role_id
+            tableName: users_roles
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: users_roles
+            constraintName: fk_roles_user_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: users_roles
+            constraintName: fk_roles_role_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: roles
+      rollback:
+        - dropTable:
+          tableName: users_roles
+
+  - changeSet:
+      id: 0.8
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: facilities
+      changes:
+        - tagDatabase:
+            tag: 0.8-facilities
+        - createTable:
+            tableName: facilities
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: space
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: double
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: facilities
+            constraintName: fk_facilities_address_id
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: addresses
+        - addForeignKeyConstraint:
+            baseColumnNames: owner_id
+            baseTableName: facilities
+            constraintName: fk_facilities_owner_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+
+        - createIndex:
+            columns:
+              - column:
+                  name: space
+            indexName: idx_space
+            tableName: facilities
+        - createIndex:
+            columns:
+              - column:
+                  name: price
+            indexName: idx_price
+            tableName: facilities
+      rollback:
+        - dropTable:
+          tableName: facilities
+
+  - changeSet:
+      id: 0.9
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: orders
+      changes:
+        - tagDatabase:
+            tag: 0.9-orders
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: facility_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: renter_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: planned_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration_in_days
+                  type: bigint
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: facility_id
+            baseTableName: orders
+            constraintName: fk_orders_facility_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: facilities
+        - addForeignKeyConstraint:
+            baseColumnNames: renter_id
+            baseTableName: orders
+            constraintName: fk_orders_renter_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+        - createIndex:
+            columns:
+              - column:
+                  name: planned_date
+            indexName: idx_planned_date
+            tableName: orders
+      rollback:
+        - dropTable:
+          tableName: orders
+
+  - changeSet:
+      id: "0.10"
+      author: I.Aukhim
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: senla-workhome-2
+                tableName: reviews
+      changes:
+        - tagDatabase:
+            tag: 0.10-reviews
+        - createTable:
+            tableName: reviews
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: facility_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: renter_id
+                  type: bigint
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text_review
+                  type: varchar(3000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rating
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: renter_id
+            baseTableName: reviews
+            constraintName: fk_reviews_renter_id
+            onUpdate: CASCADE
+            onDelete: SET NULL
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: reviews
+            constraintName: fk_reviews_order_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: orders
+        - addForeignKeyConstraint:
+            baseColumnNames: facility_id
+            baseTableName: reviews
+            constraintName: fk_reviews_facility_id
+            onUpdate: CASCADE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: facilities
+        - createIndex:
+            columns:
+              - column:
+                  name: rating
+            indexName: idx_rating
+            tableName: reviews
+      rollback:
+        - dropTable:
+          tableName: reviews
