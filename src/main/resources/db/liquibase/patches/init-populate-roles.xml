@@ -10,6 +10,7 @@
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <preConditions onFail="HALT">
         <or>
+            <changeSetExecuted id="0.11" author="I.Aukhim" changeLogFile="db/liquibase/patches/init-populate-roles.xml"></changeSetExecuted>
             <and>
                 <tableExists tableName="roles" schemaName="senla-workhome-2"></tableExists>
                 <sqlCheck expectedResult="0">
