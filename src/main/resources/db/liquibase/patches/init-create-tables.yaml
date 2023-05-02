@@ -3,7 +3,7 @@ databaseChangeLog:
       id: 0.1
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -35,7 +35,7 @@ databaseChangeLog:
       id: 0.2
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -73,7 +73,7 @@ databaseChangeLog:
       id: 0.3
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -121,7 +121,7 @@ databaseChangeLog:
       id: 0.4
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -175,7 +175,7 @@ databaseChangeLog:
       id: 0.5
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -212,7 +212,7 @@ databaseChangeLog:
       id: 0.6
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -291,7 +291,7 @@ databaseChangeLog:
       id: 0.7
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -339,7 +339,7 @@ databaseChangeLog:
       id: 0.8
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -419,7 +419,7 @@ databaseChangeLog:
       id: 0.9
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
@@ -493,7 +493,7 @@ databaseChangeLog:
       id: "0.10"
       author: I.Aukhim
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - not:
             - tableExists:
                 schemaName: senla-workhome-2
