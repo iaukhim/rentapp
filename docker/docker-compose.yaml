@@ -19,9 +19,6 @@ services:
     depends_on:
       - db
     container_name: rent-app
-    build:
-      context: ../.
-      dockerfile: ./docker/rent-app/Dockerfile
     image: iaukhim/rent-app:latest
     ports:
       - "8088:8080"
