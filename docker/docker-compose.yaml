@@ -1,23 +1,35 @@
 version: '3'
 services:
-  db:
-    container_name: mysql-docker-container
-    image: mysql:latest
+  db_postgres:
+    container_name: postgres-docker-container
+    image: postgres:latest
     restart: always
     environment:
-      MYSQL_DATABASE: 'senla-workhome-2'
-      MYSQL_ROOT_PASSWORD: 'root'
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     ports:
-      - "3366:3306"
-    expose:
-      - '3306'
+      - "5444:5432"
     volumes:
-      - /rent-app-db:/var/lib/mysql
+      - /rent-app-db/postgresql:/var/lib/postgresql
+    networks:
+      - rent-app-network
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "ivan.aukhim@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    volumes:
+      - /home/user/pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
     networks:
       - rent-app-network
   rent-app:
     depends_on:
-      - db
+      - db_postgres
     container_name: rent-app
     image: iaukhim/rent-app:latest
     ports:

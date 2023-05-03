@@ -21,6 +21,7 @@ import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +43,7 @@ import java.util.Locale;
 @PropertySource("classpath:application.properties")
 @EnableTransactionManagement
 @EnableWebMvc
+@EnableAutoConfiguration
 @Import(SecurityConfig.class)
 public class ConfigClass implements WebMvcConfigurer {
 

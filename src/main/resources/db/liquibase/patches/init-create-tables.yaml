@@ -6,7 +6,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: roles
       changes:
         - tagDatabase:
@@ -38,7 +38,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: countries
       changes:
         - tagDatabase:
@@ -76,7 +76,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: cities
       changes:
         - tagDatabase:
@@ -124,7 +124,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: addresses
       changes:
         - tagDatabase:
@@ -178,7 +178,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: users
       changes:
         - tagDatabase:
@@ -215,7 +215,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: users_info
       changes:
         - tagDatabase:
@@ -294,7 +294,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: users_roles
       changes:
         - tagDatabase:
@@ -342,7 +342,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: facilities
       changes:
         - tagDatabase:
@@ -422,7 +422,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: orders
       changes:
         - tagDatabase:
@@ -496,7 +496,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                schemaName: senla-workhome-2
+                schemaName: senla_workhome_2
                 tableName: reviews
       changes:
         - tagDatabase:
