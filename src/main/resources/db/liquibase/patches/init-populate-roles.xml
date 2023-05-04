@@ -2,26 +2,22 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <preConditions onFail="HALT">
         <or>
             <changeSetExecuted id="0.11" author="I.Aukhim" changeLogFile="db/liquibase/patches/init-populate-roles.xml"></changeSetExecuted>
             <and>
-                <tableExists tableName="roles" schemaName="senla-workhome-2"></tableExists>
+                <tableExists tableName="roles" schemaName="senla_workhome_2"></tableExists>
                 <sqlCheck expectedResult="0">
                     SELECT COUNT(*)
-                    FROM `senla-workhome-2`.roles
+                    FROM senla_workhome_2.roles
                     WHERE role in ('ADMIN', 'LANDLORD', 'RENTER');
                 </sqlCheck>
                 <changeSetExecuted id="0.1" author="i.Aukhim" changeLogFile="db/liquibase/patches/init-create-tables.yaml"></changeSetExecuted>
             </and>
             <not>
-                <tableExists tableName="roles" schemaName="senla-workhome-2"></tableExists>
+                <tableExists tableName="roles" schemaName="senla_workhome_2"></tableExists>
             </not>
         </or>
 
@@ -33,13 +29,13 @@
         </insert>
         <insert
                 dbms="h2, mysql"
-                schemaName="senla-workhome-2"
+                schemaName="senla_workhome_2"
                 tableName="roles">
             <column name="role" value="LANDLORD"/>
         </insert>
         <insert
                 dbms="h2, mysql"
-                schemaName="senla-workhome-2"
+                schemaName="senla_workhome_2"
                 tableName="roles">
             <column name="role" value="RENTER"/>
         </insert>
