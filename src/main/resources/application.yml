@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: 'rent-app'
+  config:
+    import: 'configserver:http://admin:admin@localhost:8888'

@@ -27,9 +27,17 @@ services:
     restart: unless-stopped
     networks:
       - rent-app-network
+  config-server:
+    container_name: config-server-container
+    image: iaukhim/config-server:latest
+    ports:
+      - "8888:8888"
+    networks:
+      - rent-app-network
   rent-app:
     depends_on:
       - db_postgres
+      - config-server
     container_name: rent-app
     image: iaukhim/rent-app:latest
     ports:

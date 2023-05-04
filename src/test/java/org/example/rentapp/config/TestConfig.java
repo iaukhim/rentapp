@@ -8,8 +8,7 @@ import org.springframework.context.annotation.PropertySources;
 @Configuration
 @Profile("test")
 @PropertySources({
-        @PropertySource("classpath:application.properties"),
-        @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
+        @PropertySource(value = "classpath:application.yml", ignoreResourceNotFound = true)
 })
 public class TestConfig {
 

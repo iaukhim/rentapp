@@ -40,7 +40,7 @@ import java.util.Locale;
 
 @Configuration
 @ComponentScan(value = "org.example")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yml")
 @EnableTransactionManagement
 @EnableWebMvc
 @EnableAutoConfiguration
