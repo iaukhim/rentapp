@@ -2,4 +2,6 @@ spring:
   application:
     name: 'rent-app'
   config:
-    import: 'configserver:http://admin:admin@localhost:8888'
+    import: 'configserver:https://admin:admin@config-server:8888'
+    username: admin
+    password: admin
