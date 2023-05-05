@@ -54,6 +54,8 @@ services:
         condition: service_started
     container_name: rent-app
     image: iaukhim/rent-app:latest
+    volumes:
+      - /home/user/certificates/rent-app:/certificates/
     ports:
       - "8088:8080"
     networks:
