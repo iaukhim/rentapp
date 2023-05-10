@@ -1,6 +1,6 @@
 version: '2'
 services:
-  db_postgres:
+  db-postgres:
     container_name: postgres-docker-container
     image: postgres:latest
     restart: always
@@ -50,7 +50,7 @@ services:
       config-server:
         condition: service_healthy
         restart: true
-      db_postgres:
+      db-postgres:
         condition: service_started
     container_name: rent-app
     image: iaukhim/rent-app:latest
