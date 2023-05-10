@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   db_postgres:
     container_name: postgres-docker-container
@@ -27,11 +27,35 @@ services:
     restart: unless-stopped
     networks:
       - rent-app-network
+  config-server:
+    container_name: config-server-container
+    image: iaukhim/config-server:latest
+    volumes:
+      - /home/user/certificates/config-server:/certificates/
+      - /home/user/certificates/github:/root/.ssh/
+    ports:
+      - "8888:8888"
+    expose:
+      - 8989
+    networks:
+      - rent-app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost:8989/actuator/health"]
+      interval: 10s
+      retries: 5
+      timeout: 10s
+      start_period: 10s
   rent-app:
     depends_on:
-      - db_postgres
+      config-server:
+        condition: service_healthy
+        restart: true
+      db_postgres:
+        condition: service_started
     container_name: rent-app
     image: iaukhim/rent-app:latest
+    volumes:
+      - /home/user/certificates/rent-app:/certificates/
     ports:
       - "8088:8080"
     networks:

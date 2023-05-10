@@ -5,8 +5,6 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceUtil;
 import jakarta.transaction.Transactional;
-import org.example.rentapp.config.TestConfig;
-import org.example.rentapp.configuration.ConfigClass;
 import org.example.rentapp.dao.interfaces.AddressDao;
 import org.example.rentapp.dao.interfaces.FacilityDao;
 import org.example.rentapp.dao.interfaces.OrderDao;
@@ -20,20 +18,17 @@ import org.example.rentapp.providers.DataProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDate;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Transactional
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ConfigClass.class, TestConfig.class})
+@SpringBootTest
 @ActiveProfiles("test")
 @WebAppConfiguration
 public class OrderDaoTest {

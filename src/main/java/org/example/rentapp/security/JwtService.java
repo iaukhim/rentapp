@@ -24,7 +24,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yml")
 public class JwtService {
 
     private final UserDetailsService userDetailsService;
