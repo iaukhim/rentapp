@@ -1,7 +1,5 @@
 package org.example.rentapp.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
 import org.example.rentapp.converters.address.AddressDtoToEntityConverter;
 import org.example.rentapp.converters.address.AddressEntityToDtoConverter;
@@ -49,14 +47,6 @@ public class ConfigClass implements WebMvcConfigurer {
 
     @Value("${entities.package}")
     private String entitiesPackage;
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(simpleModule);
-        return objectMapper;
-    }
 
     @Bean
     public FacilityDtoToEntityConverter facilityDtoToEntityConverter() {

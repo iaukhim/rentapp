@@ -1,5 +1,50 @@
 version: '2'
 services:
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - '27018:27017'
+    volumes:
+      - /mounts/rent-app/mongodb:/data/db
+    networks:
+      - rent-app-network
+
+
+  eureka-server:
+    container_name: eureka-server
+    image: iaukhim/eureka-server
+    ports:
+      - 8761:8761
+    networks:
+      - rent-app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "localhost:8989/actuator/health" ]
+      interval: 10s
+      retries: 5
+      timeout: 10s
+      start_period: 10s
+
+
+  review-service:
+    depends_on:
+      mongodb:
+        condition: service_started
+      eureka-server:
+        condition: service_healthy
+    container_name: review-service
+    image: iaukhim/review-service
+    ports:
+      - 8586:8586
+    networks:
+      - rent-app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "localhost:8989/actuator/health" ]
+      interval: 10s
+      retries: 5
+      timeout: 10s
+      start_period: 10s
+
+
   db-postgres:
     container_name: postgres-docker-container
     image: postgres:latest
@@ -14,6 +59,8 @@ services:
       - /rent-app-db/postgresql:/var/lib/postgresql
     networks:
       - rent-app-network
+
+
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4:latest
@@ -27,6 +74,8 @@ services:
     restart: unless-stopped
     networks:
       - rent-app-network
+
+
   config-server:
     container_name: config-server-container
     image: iaukhim/config-server:latest
@@ -45,6 +94,8 @@ services:
       retries: 5
       timeout: 10s
       start_period: 10s
+
+
   rent-app:
     depends_on:
       config-server:
@@ -52,6 +103,10 @@ services:
         restart: true
       db-postgres:
         condition: service_started
+      eureka-server:
+        condition: service_healthy
+      review-service:
+        condition: service_healthy
     container_name: rent-app
     image: iaukhim/rent-app:latest
     volumes:
