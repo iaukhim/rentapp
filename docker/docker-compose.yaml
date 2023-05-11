@@ -95,6 +95,18 @@ services:
       timeout: 10s
       start_period: 10s
 
+  errors-listener-service:
+    container_name: errors-listener-service-container
+    image: iaukhim/errors-listener-service:latest
+    networks:
+      - rent-app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "localhost:8989/actuator/health" ]
+      interval: 10s
+      retries: 5
+      timeout: 10s
+      start_period: 10s
+
 
   rent-app:
     depends_on:
@@ -107,6 +119,10 @@ services:
         condition: service_healthy
       review-service:
         condition: service_healthy
+      broker:
+        condition: service_started
+      errors-listener-service:
+        condition: service_healthy
     container_name: rent-app
     image: iaukhim/rent-app:latest
     volumes:
@@ -115,6 +131,36 @@ services:
       - "8088:8080"
     networks:
       - rent-app-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.2
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - rent-app-network
+
+  broker:
+    depends_on:
+      zookeeper:
+        condition: service_started
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: broker
+    ports:
+      # To learn about configuring Kafka for access across networks see
+      # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      - "9092:9092"
+    networks:
+      - rent-app-network
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 networks:
   rent-app-network:
     driver: bridge
